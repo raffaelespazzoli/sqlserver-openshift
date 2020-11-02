@@ -1,12 +1,12 @@
 ---
-apiVersion: cert-manager.io/v1beta1
+apiVersion: cert-manager.io/v1alpha2
 kind: Issuer
 metadata:
   name: self-signer
 spec:
   selfSigned: {}
 ---
-apiVersion: cert-manager.io/v1beta1
+apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
 metadata:
   name: rootca
@@ -17,7 +17,7 @@ spec:
   commonName: "ca.self-signer.cert-manager"
   isCA: true
 ---
-apiVersion: cert-manager.io/v1beta1
+apiVersion: cert-manager.io/v1alpha2
 kind: Issuer
 metadata:
   name: internal-issuer
@@ -25,7 +25,7 @@ spec:
   ca:
     secretName: rootca
 ---
-apiVersion: cert-manager.io/v1beta1
+apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
 metadata:
   name: {{ template "mssql.fullname" . }}
