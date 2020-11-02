@@ -16,6 +16,7 @@ helm upgrade mssql ./charts/mssql-linux -i --create-namespace -n ${namespace} -f
 #Test
 sudo podman run -it --rm mcr.microsoft.com/mssql/rhel/server:2019-latest "bash"
 
+#Note this is just an example - substitute the elb host and password with the generated ones
 /opt/mssql-tools/bin/sqlcmd -S a4c5ff57003b549da94fdc24a4c28626-949138761.us-east-2.elb.amazonaws.com,1433 -N -U SA -P "qXFV7f76Q7JYniMsztzZ" -C
 ```
 
