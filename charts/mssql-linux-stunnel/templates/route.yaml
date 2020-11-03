@@ -1,3 +1,4 @@
+---
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
@@ -5,9 +6,11 @@ metadata:
 spec:
   host: {{ template "mssql.fullname" . }}.{{ .Values.apps_base_domain }}
   port:
-    targetPort: mssql
+    #targetPort: mssql
+    targetPort: stunnel
   tls:
     termination: Passthrough
   to:
     kind: Service
     name: {{ template "mssql.fullname" . }}
+...
