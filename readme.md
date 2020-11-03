@@ -14,10 +14,18 @@ export apps_base_domain=apps.$(oc get dns cluster -o jsonpath='{.spec.baseDomain
 helm upgrade mssql ./charts/mssql-linux -i --create-namespace -n ${namespace} -f ./values.yaml --set apps_base_domain=${apps_base_domain}
 
 #Test
+
+stunnel stunnel-client.conf
+
 sudo podman run -it --rm mcr.microsoft.com/mssql/rhel/server:2019-latest "bash"
 
-#Note this is just an example - substitute the elb host and password with the generated ones
-/opt/mssql-tools/bin/sqlcmd -S a4c5ff57003b549da94fdc24a4c28626-949138761.us-east-2.elb.amazonaws.com,1433 -N -U SA -P "qXFV7f76Q7JYniMsztzZ" -C
+/opt/mssql-tools/bin/sqlcmd -S 192.168.1.25,1433 -U SA -P "BaDEn2Ak5qE7etMaA4yK"
+
+#Note this is just an example for testing connectivity to the ELB host will probably remove this - substitute the elb host and password with the generated ones
+/opt/mssql-tools/bin/sqlcmd -S abade2b75403744409a872e4807f5889-345429645.us-east-2.elb.amazonaws.com,1433 -N -U SA -P "loXPpK40M1DoLvFpbAUp" -C
+
+/opt/mssql-tools/bin/sqlcmd -S abade2b75403744409a872e4807f5889-345429645.us-east-2.elb.amazonaws.com,1433 -U SA -P "loXPpK40M1DoLvFpbAUp"
+
 ```
 
 ## Cleanup

@@ -33,9 +33,11 @@ spec:
   secretName: {{ template "mssql.fullname" . }}-tls
   issuerRef:
     name: internal-issuer
-  commonName: sqlserver
+  commonName: {{ template "mssql.fullname" . }}.{{ .Values.apps_base_domain }}
   usages:
     - server auth
   dnsNames:
+    - {{ template "mssql.fullname" . }}.{{ .Values.apps_base_domain }}
     - {{ template "mssql.fullname" . }}
     - {{ template "mssql.fullname" . }}.{{ .Release.Namespace }}.svc
+    - {{ template "mssql.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local

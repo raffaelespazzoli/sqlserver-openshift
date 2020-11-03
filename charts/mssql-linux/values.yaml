@@ -29,7 +29,8 @@ service:
   # If headless is set to TRUE then the service type is ignored
   headless: false
   type: ClusterIP
-  port: 1433
+  #port: 1433
+  port: 5001
   nodePort:
   annotations: {}
   labels: {}
