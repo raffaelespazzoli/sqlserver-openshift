@@ -36,10 +36,10 @@ data:
     memorylimitmb = 4096
     
     [network]
-    forceencryption = 1
-    tlscert = /var/opt/certs/tls.crt
-    tlskey = /var/opt/certs/tls.key
-    tlsprotocols = 1.2
+    # forceencryption = 1
+    # tlscert = /var/opt/certs/tls.crt
+    # tlskey = /var/opt/certs/tls.key
+    # tlsprotocols = 1.2
 
     # [sqlagent]
     # databasemailprofile = default
