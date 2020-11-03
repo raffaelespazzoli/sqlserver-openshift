@@ -210,8 +210,8 @@ spec:
               mountPath: /mssql-data/master
             - name: config
               mountPath: /var/opt/config
-            - name: certs
-              mountPath: /var/opt/certs              
+            #- name: certs
+            #  mountPath: /var/opt/certs              
           livenessProbe:
              tcpSocket:
                port: mssql
@@ -224,6 +224,36 @@ spec:
              periodSeconds: {{ .Values.readinessprobe.periodSeconds }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
+        - name: stunnel
+          resources: {}
+          readinessProbe:
+            tcpSocket:
+              port: 5000
+            initialDelaySeconds: 1
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            tcpSocket:
+              port: 5000
+            initialDelaySeconds: 1
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          ports:
+            - name: stunnel
+              containerPort: 5000
+              protocol: TCP
+          imagePullPolicy: Always
+          image: image-registry.openshift-image-registry.svc:5000/mssql/stunnel:latest
+          env:
+            - name: CONNECT_PORT
+              value: {{ .Values.service.port | quote}}
+          volumeMounts:
+            - name: certificate
+              mountPath: /etc/stunnel/pki
     {{- if .Values.image.pullSecrets }}
       imagePullSecrets:
 {{ toYaml .Values.image.pullSecrets | indent 8 }}
@@ -292,6 +322,14 @@ spec:
       - name: config
         configMap:
           name: {{ template "mssql.fullname" . }}
-      - name: certs
+      #- name: certs
+      #  secret:
+      #    secretName: {{ template "mssql.fullname" . }}-tls
+      - name: certificate
         secret:
           secretName: {{ template "mssql.fullname" . }}-tls
+          items:
+          - key: tls.crt 
+            path: cert.pem
+          - key: tls.key
+            path: key.pem
