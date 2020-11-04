@@ -44,7 +44,7 @@ export password= # paste from previous
 /opt/mssql-tools/bin/sqlcmd -S ${ip_address},1433 -U SA -P ${password}
 ```
 
-## Deploy with certificate presented by the mssql container
+## Deploy with certificate presented by the mssql container - connect with loadbalancer
 
 You need to use an external load balancer to connect to this container since an openshift route won't work with this configuration.
 
@@ -70,7 +70,7 @@ export password= # paste from previous
 /opt/mssql-tools/bin/sqlcmd -S ${elb_host},1433 -N -U SA -P ${password} -C
 ```
 
-## Deploy with certificate presented by the mssql container and openshift route
+## Deploy with certificate presented by the mssql container - connect with openshift route
 
 For this configuration you need and application that can originate TLS with SNI for the Openshift passthrough route to work. SNI is a requirement for HAProxy.
 
