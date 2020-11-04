@@ -1,0 +1,43 @@
+---
+apiVersion: cert-manager.io/v1alpha2
+kind: Issuer
+metadata:
+  name: self-signer
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: rootca
+spec:
+  secretName: rootca
+  issuerRef:
+    name: self-signer
+  commonName: "ca.self-signer.cert-manager"
+  isCA: true
+---
+apiVersion: cert-manager.io/v1alpha2
+kind: Issuer
+metadata:
+  name: internal-issuer
+spec:
+  ca:
+    secretName: rootca
+---
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: {{ template "mssql.fullname" . }}
+spec:
+  secretName: {{ template "mssql.fullname" . }}-tls
+  issuerRef:
+    name: internal-issuer
+  commonName: {{ template "mssql.fullname" . }}.{{ .Values.apps_base_domain }}
+  usages:
+    - server auth
+  dnsNames:
+    - {{ template "mssql.fullname" . }}.{{ .Values.apps_base_domain }}
+    - {{ template "mssql.fullname" . }}
+    - {{ template "mssql.fullname" . }}.{{ .Release.Namespace }}.svc
+    - {{ template "mssql.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local

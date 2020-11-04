@@ -70,6 +70,19 @@ export password= # paste from previous
 /opt/mssql-tools/bin/sqlcmd -S ${elb_host},1433 -N -U SA -P ${password} -C
 ```
 
+## Deploy with certificate presented by the mssql container and openshift route
+
+For this configuration you need and application that can originate TLS with SNI for the Openshift passthrough route to work. SNI is a requirement for HAProxy.
+
+```shell
+oc apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v0.15.0/cert-manager.yaml
+export namespace=mssql
+export apps_base_domain=apps.$(oc get dns cluster -o jsonpath='{.spec.baseDomain}')
+helm upgrade mssql ./charts/mssql-linux-route -i --create-namespace -n ${namespace} -f ./values.yaml --set apps_base_domain=${apps_base_domain}
+```
+
+> TODO: we need an example application that can origiate the TLS with SNI to test this configration.
+
 ## Cleanup
 
 ```sh
