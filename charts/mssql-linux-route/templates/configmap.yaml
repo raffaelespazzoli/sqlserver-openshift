@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "mssql.fullname" . }}
+  labels:
+    app: {{ template "mssql.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  mssql.conf: |
+    [EULA]
+    accepteula = Y
+    accepteulaml = Y
+    
+    [coredump]
+    captureminiandfull = true
+    coredumptype = full
+    
+    [distributedtransaction]
+    servertcpport = 51999
+    
+    [filelocation]
+    defaultbackupdir = /mssql-backup/backup
+    defaultdatadir = /mssql-data/data
+    defaultdumpdir = /mssql-data/data
+    defaultlogdir = /mssql-translog/translog
+    
+    [hadr]
+    hadrenabled = 0
+    
+    [language]
+    lcid = 1033
+    
+    [memory]
+    memorylimitmb = 4096
+    
+    [network]
+    forceencryption = 1
+    tlscert = /var/opt/certs/tls.crt
+    tlskey = /var/opt/certs/tls.key
+    tlsprotocols = 1.2
+
+    # [sqlagent]
+    # databasemailprofile = default
+    # errorlogfile = /var/opt/mssql/log/sqlagentlog.log
+    # errorlogginglevel = 7
+    
+    # [telemetry]
+    # customerfeedback = true
+    # userrequestedlocalauditdirectory = /tmp/audit
+    
+    # [traceflag]
+    # traceflag0 = 1204
+    # traceflag1 = 2345
+    # traceflag = 3456    
